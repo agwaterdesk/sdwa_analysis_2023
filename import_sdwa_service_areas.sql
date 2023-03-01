@@ -1,9 +1,9 @@
-drop table sdwa_service_areas if exists cascade;
+drop table if exists sdwa_service_areas cascade;
 
 CREATE TABLE sdwa_service_areas (
-	"SUBMISSIONYEARQUARTER" VARCHAR, 
-	"PWSID" DECIMAL, 
-	"SERVICE_AREA_TYPE_CODE" VARCHAR, 
+	"SUBMISSIONYEARQUARTER" TEXT, 
+	"PWSID" TEXT, 
+	"SERVICE_AREA_TYPE_CODE" TEXT, 
 	"IS_PRIMARY_SERVICE_AREA_CODE" TEXT, 
 	"FIRST_REPORTED_DATE" DATE, 
 	"LAST_REPORTED_DATE" DATE

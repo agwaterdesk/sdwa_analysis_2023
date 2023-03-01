@@ -27,10 +27,17 @@ If you don't specify a task, the script runs all of the default tasks in sequenc
         file_name="import_${base,,}"
         table_name="${base,,}"
         head -n 20 $csv | csvsql --no-constraints --tables $table_name > headers/$file_name.sql;
-        echo "drop table ${table_name} if exists cascade;"$'\n\n'"$(cat headers/$file_name.sql)" > headers/$file_name.sql;
+        echo "drop table if exists ${table_name} cascade;"$'\n\n'"$(cat headers/$file_name.sql)" > headers/$file_name.sql;
         echo $'\n'"\copy ${table_name} from 'data/${table_name}.csv' csv header;" >> headers/$file_name.sql;
     done
     popd
+  ;;&
+
+  headers | edit_schema)
+    echo "=== Changing busted dtypes"
+    find data/headers/*.sql -type f -exec sed -i '' 's/BOOLEAN/TEXT/g' {} \;
+    find data/headers/*.sql -type f -exec sed -i '' 's/VARCHAR/TEXT/g' {} \;
+    find data/headers/*.sql -type f -exec sed -i '' 's/DECIMAL/TEXT/g' {} \;
   ;;&
 
   headers | copy_headers)
@@ -69,7 +76,7 @@ If you don't specify a task, the script runs all of the default tasks in sequenc
 
   # combine ccd enrollment with ccd directory info
   all | combine)
-    echo "=== Joining ccd directory to ccd student data..."
+    echo "=== Joining sdwa tables..."
     for combine in combine*.sql; do
       psql sdwa -f $combine;
     done
