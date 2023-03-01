@@ -66,7 +66,7 @@ If you don't specify a task, the script runs all of the default tasks in sequenc
     done
   ;;&
 
-  # filter ccd data to in-scope topics
+  # filter sdwa data to in-scope states
   all | filter)
     echo "=== Filtering sdwa data..."
     for filter in filter*.sql; do
@@ -74,7 +74,7 @@ If you don't specify a task, the script runs all of the default tasks in sequenc
     done
   ;;&
 
-  # combine ccd enrollment with ccd directory info
+  # combine sdwa tables
   all | combine)
     echo "=== Joining sdwa tables..."
     for combine in combine*.sql; do
