@@ -2,45 +2,66 @@
 
 task=${1:-all}
 
-# download/unpack shapefiles and upload into PostGIS
 case $task in
   help)
     echo """Tasks you can run with this script:
-  - database: downloads shapefiles and (re)creates the PostGIS DB
-  - intersections: matches blockgroups to geodata
-  - import: runs all census data imports
-  - districts: runs analysis and outputs district-level census data
-  - cps: runs analysis and outputs attendance boundary-level census data
-If you don't specify a task, the script runs all of these in sequence.
+ Optional:
+  - create_schema: uses csvkit to guess SQL titles and dtypes as a create table statement
+  - copy_headers: copies csvkit suggested import method from header folder to main 
+ Default:
+  - database: creates psql DB
+  - import: runs all common core data imports
+  - filter: limits school-level data to in-scope states
+  - combine: adds district IDs and other characteristics to school-level data
+If you don't specify a task, the script runs all of the default tasks in sequence. Optional tasks must be run manually.
     """
   ;;
 
+  # HEADERS: generate createtable from headers (must be manually run)
+  headers | create_schema)
+    echo "=== Pulling headers to create schemas"
+    pushd data
+    mkdir -p headers
+    for csv in *.csv; do
+        base="${csv%.csv}"
+        file_name="import_${base,,}"
+        table_name="${base,,}"
+        head -n 20 $csv | csvsql --no-constraints --tables $table_name > headers/$file_name.sql;
+        echo "drop table ${table_name} if exists cascade;"$'\n\n'"$(cat headers/$file_name.sql)" > headers/$file_name.sql;
+        echo $'\n'"\copy ${table_name} from 'data/${table_name}.csv' csv header;" >> headers/$file_name.sql;
+    done
+    popd
+  ;;&
+
+  headers | copy_headers)
+    echo "=== Adding header files to root directory"
+    cp -a data/headers/*.sql .
+  ;;
+
+  # ALL: main tasks (run by default)
   all | database)
     echo "=== Creating and populating database..."
     dropdb sdwa
     createdb sdwa
   ;;&
 
+  # create folders
+  all | folders)
+    echo "=== Creating file structure"
+    mkdir -p output
+  ;;&
+
   # load data
   all | import)
-    echo "=== Loading ccd data..."
+    echo "=== Loading sdwa data..."
     for import in import*.sql; do
       psql sdwa -f $import;
     done
   ;;&
-  
-#   # create import files
-#   all | headers)
-#     echo "=== Pulling headers to create schemas"
-#     for csv in SDWA*.csv; 
-#       head -n 20 $csv | csvsql --no-constraints --tables $csv
-#       cat /Users/kmpetrin/2023_02_sdwa/$csv.sql
-#     done
-#   ;;&
 
   # filter ccd data to in-scope topics
   all | filter)
-    echo "=== Filtering ccd data..."
+    echo "=== Filtering sdwa data..."
     for filter in filter*.sql; do
       psql sdwa -f $filter;
     done
