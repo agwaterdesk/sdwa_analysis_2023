@@ -11,6 +11,15 @@ Prerequisites
 Instructions
 ------------
 
+This data is sourced from the EPA's SDWA database. EPA documentation is [available here](https://echo.epa.gov/tools/data-downloads/sdwa-download-summary). This pipeline loads and imports all tables.
+
+The data can be downloaded [from the EPA website](https://echo.epa.gov/files/echodownloads/SDWA_latest_downloads.zip). Place it in the `data/` folder in `.csv` format.
+
+Additional information is available on the [EPA's downloads page](https://echo.epa.gov/tools/data-downloads).
+
+Instructions
+------------
+
 ### To run
 
 Execute ``./runme.sh`` to step through the various scripts. That file is also commented, so you can see the individual processing steps and re-run them once the pipeline is initialized.
