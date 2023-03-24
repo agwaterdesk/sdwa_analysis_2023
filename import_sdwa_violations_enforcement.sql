@@ -1,43 +1,51 @@
 drop table if exists sdwa_violations_enforcement cascade;
 
 CREATE TABLE sdwa_violations_enforcement (
-	"SUBMISSIONYEARQUARTER" TEXT, 
-	"PWSID" TEXT, 
-	"VIOLATION_ID" TEXT, 
-	"FACILITY_ID" TEXT, 
-	"COMPL_PER_BEGIN_DATE" DATE, 
-	"COMPL_PER_END_DATE" DATE, 
-	"NON_COMPL_PER_BEGIN_DATE" DATE, 
-	"NON_COMPL_PER_END_DATE" TEXT, 
-	"VIOLATION_CODE" TEXT, 
-	"VIOLATION_CATEGORY_CODE" TEXT, 
-	"IS_HEALTH_BASED_IND" TEXT, 
-	"CONTAMINANT_CODE" TEXT, 
-	"VIOL_MEASURE" TEXT, 
-	"UNIT_OF_MEASURE" TEXT, 
-	"FEDERAL_MCL" TEXT, 
-	"STATE_MCL" TEXT, 
-	"IS_MAJOR_VIOL_IND" TEXT, 
-	"SEVERITY_IND_CNT" TEXT, 
-	"CALCULATED_RTC_DATE" DATE, 
-	"VIOLATION_STATUS" TEXT, 
-	"PUBLIC_NOTIFICATION_TIER" TEXT, 
-	"CALCULATED_PUB_NOTIF_TIER" TEXT, 
-	"VIOL_ORIGINATOR_CODE" TEXT, 
-	"SAMPLE_RESULT_ID" TEXT, 
-	"CORRECTIVE_ACTION_ID" TEXT, 
-	"RULE_CODE" TEXT, 
-	"RULE_GROUP_CODE" TEXT, 
-	"RULE_FAMILY_CODE" TEXT, 
-	"VIOL_FIRST_REPORTED_DATE" DATE, 
-	"VIOL_LAST_REPORTED_DATE" TEXT, 
-	"ENFORCEMENT_ID" TEXT, 
-	"ENFORCEMENT_DATE" DATE, 
-	"ENFORCEMENT_ACTION_TYPE_CODE" TEXT, 
-	"ENF_ACTION_CATEGORY" TEXT, 
-	"ENF_ORIGINATOR_CODE" TEXT, 
-	"ENF_FIRST_REPORTED_DATE" DATE, 
-	"ENF_LAST_REPORTED_DATE" TEXT
+	submissionyearquarter TEXT, 
+	pwsid TEXT, 
+	violation_id TEXT, 
+	facility_id TEXT, 
+	compl_per_begin_date DATE, 
+	compl_per_end_date DATE, 
+	non_compl_per_begin_date DATE, 
+	non_compl_per_end_date TEXT, 
+	violation_code TEXT, 
+	violation_category_code TEXT, 
+	is_health_based_ind TEXT, 
+	contaminant_code TEXT, 
+	viol_measure TEXT, 
+	unit_of_measure TEXT, 
+	federal_mcl TEXT, 
+	state_mcl TEXT, 
+	is_major_viol_ind TEXT, 
+	severity_ind_cnt TEXT, 
+	calculated_rtc_date DATE, 
+	violation_status TEXT, 
+	public_notification_tier TEXT, 
+	calculated_pub_notif_tier TEXT, 
+	viol_originator_code TEXT, 
+	sample_result_id TEXT, 
+	corrective_action_id TEXT, 
+	rule_code TEXT, 
+	rule_group_code TEXT, 
+	rule_family_code TEXT, 
+	viol_first_reported_date DATE, 
+	viol_last_reported_date DATE, 
+	enforcement_id TEXT, 
+	enforcement_date DATE, 
+	enforcement_action_type_code TEXT, 
+	enf_action_category TEXT, 
+	enf_originator_code TEXT, 
+	enf_first_reported_date DATE, 
+	enf_last_reported_date DATE
 );
 
 \copy sdwa_violations_enforcement from 'data/sdwa_violations_enforcement.csv' csv header;
+
+/* notes 
+
+13,795,740 rows
+w
+2,121,742 distinct violation ids
+
+*/

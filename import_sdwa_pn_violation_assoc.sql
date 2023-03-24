@@ -1,18 +1,18 @@
 drop table if exists sdwa_pn_violation_assoc cascade;
 
 CREATE TABLE sdwa_pn_violation_assoc (
-	"SUBMISSIONYEARQUARTER" TEXT, 
-	"PWSID" TEXT, 
-	"PN_VIOLATION_ID" TEXT, 
-	"RELATED_VIOLATION_ID" TEXT, 
-	"COMPL_PER_BEGIN_DATE" DATE, 
-	"COMPL_PER_END_DATE" DATE, 
-	"NON_COMPL_PER_BEGIN_DATE" DATE, 
-	"NON_COMPL_PER_END_DATE" TEXT, 
-	"VIOLATION_CODE" TEXT, 
-	"CONTAMINANT_CODE" TEXT, 
-	"FIRST_REPORTED_DATE" DATE, 
-	"LAST_REPORTED_DATE" DATE
+	submissionyearquarter TEXT, 
+	pwsid TEXT, 
+	pn_violation_id TEXT, 
+	related_violation_id TEXT, 
+	compl_per_begin_date DATE, 
+	compl_per_end_date DATE, 
+	non_compl_per_begin_date DATE, 
+	non_compl_per_end_date TEXT, 
+	violation_code TEXT, 
+	contaminant_code TEXT, 
+	first_reported_date DATE, 
+	last_reported_date DATE
 );
 
 \copy sdwa_pn_violation_assoc from 'data/sdwa_pn_violation_assoc.csv' csv header;

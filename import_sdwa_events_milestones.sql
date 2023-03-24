@@ -1,16 +1,16 @@
 drop table if exists sdwa_events_milestones cascade;
 
 CREATE TABLE sdwa_events_milestones (
-	"SUBMISSIONYEARQUARTER" TEXT, 
-	"PWSID" TEXT, 
-	"EVENT_SCHEDULE_ID" TEXT, 
-	"EVENT_END_DATE" DATE, 
-	"EVENT_ACTUAL_DATE" DATE, 
-	"EVENT_COMMENTS_TEXT" TEXT, 
-	"EVENT_MILESTONE_CODE" TEXT, 
-	"EVENT_REASON_CODE" TEXT, 
-	"FIRST_REPORTED_DATE" DATE, 
-	"LAST_REPORTED_DATE" DATE
+	submissionyearquarter TEXT, 
+	pwsid TEXT, 
+	event_schedule_id TEXT, 
+	event_end_date DATE, 
+	event_actual_date DATE, 
+	event_comments_text TEXT, 
+	event_milestone_code TEXT, 
+	event_reason_code TEXT, 
+	first_reported_date DATE, 
+	last_reported_date DATE
 );
 
 \copy sdwa_events_milestones from 'data/sdwa_events_milestones.csv' csv header;

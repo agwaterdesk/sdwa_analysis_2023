@@ -7,6 +7,7 @@ case $task in
     echo """Tasks you can run with this script:
  Optional:
   - create_schema: uses csvkit to guess SQL titles and dtypes as a create table statement
+  - edit_schema: uses sed to change dtypes to TEXT and NUMERIC; leaves DATE
   - copy_headers: copies csvkit suggested import method from header folder to main 
  Default:
   - database: creates psql DB
@@ -23,21 +24,21 @@ If you don't specify a task, the script runs all of the default tasks in sequenc
     pushd data
     mkdir -p headers
     for csv in *.csv; do
-        base="${csv%.csv}"
-        file_name="import_${base,,}"
-        table_name="${base,,}"
-        head -n 20 $csv | csvsql --no-constraints --tables $table_name > headers/$file_name.sql;
-        echo "drop table if exists ${table_name} cascade;"$'\n\n'"$(cat headers/$file_name.sql)" > headers/$file_name.sql;
-        echo $'\n'"\copy ${table_name} from 'data/${table_name}.csv' csv header;" >> headers/$file_name.sql;
+      base="${csv%.csv}"
+      file_name="import_${base,,}"
+      table_name="${base,,}"
+      echo "drop table if exists ${table_name} cascade;"$'\n' > headers/$file_name.sql;
+      head -n 500 $csv | tr "[:upper:]" "[:lower:]" | csvsql --no-constraints --tables $table_name >> headers/$file_name.sql;        
+      echo $'\n'"\copy ${table_name} from 'data/${table_name}.csv' csv header;" >> headers/$file_name.sql;
     done
     popd
   ;;&
 
   headers | edit_schema)
-    echo "=== Changing busted dtypes"
-    find data/headers/*.sql -type f -exec sed -i '' 's/BOOLEAN/TEXT/g' {} \;
-    find data/headers/*.sql -type f -exec sed -i '' 's/VARCHAR/TEXT/g' {} \;
-    find data/headers/*.sql -type f -exec sed -i '' 's/DECIMAL/TEXT/g' {} \;
+    echo "=== Changing dtypes to TEXT, NUMERIC and DATE"
+    for file in data/headers/*.sql; do
+      sed 's/BOOLEAN/TEXT/g; s/VARCHAR/TEXT/g; s/DECIMAL/TEXT/g' $file > $file.tmp; mv $file.tmp $file;
+    done
   ;;&
 
   headers | copy_headers)
@@ -60,25 +61,25 @@ If you don't specify a task, the script runs all of the default tasks in sequenc
 
   # load data
   all | import)
-    echo "=== Loading sdwa data..."
+    echo "=== Loading ccd data..."
     for import in import*.sql; do
       psql sdwa -f $import;
     done
   ;;&
 
-  # filter sdwa data to in-scope states
+  # filter ccd data to in-scope topics
   all | filter)
-    echo "=== Filtering sdwa data..."
+    echo "=== Filtering ccd data..."
     for filter in filter*.sql; do
       psql sdwa -f $filter;
     done
   ;;&
 
-  # combine sdwa tables
+  # combine ccd enrollment with ccd directory info
   all | combine)
-    echo "=== Joining sdwa tables..."
-    for combine in combine*.sql; do
-      psql sdwa -f $combine;
+    echo "=== Joining ccd directory to ccd student data..."
+    for join in join*.sql; do
+      psql sdwa -f $join;
     done
   ;;&
 esac
