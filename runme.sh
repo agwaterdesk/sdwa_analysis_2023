@@ -61,7 +61,7 @@ If you don't specify a task, the script runs all of the default tasks in sequenc
 
   # load data
   all | import)
-    echo "=== Loading ccd data..."
+    echo "=== Loading data..."
     for import in import*.sql; do
       psql sdwa -f $import;
     done
@@ -69,7 +69,7 @@ If you don't specify a task, the script runs all of the default tasks in sequenc
 
   # filter ccd data to in-scope topics
   all | filter)
-    echo "=== Filtering ccd data..."
+    echo "=== Filtering data..."
     for filter in filter*.sql; do
       psql sdwa -f $filter;
     done
@@ -77,9 +77,17 @@ If you don't specify a task, the script runs all of the default tasks in sequenc
 
   # combine ccd enrollment with ccd directory info
   all | combine)
-    echo "=== Joining ccd directory to ccd student data..."
+    echo "=== Joining data..."
     for join in join*.sql; do
       psql sdwa -f $join;
+    done
+  ;;&
+
+  # export all data
+  all | export)
+    echo "=== Exporting data..."
+    for export in export*.sql; do
+      psql sdwa -f $export;
     done
   ;;&
 esac

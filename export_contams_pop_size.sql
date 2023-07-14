@@ -1,11 +1,12 @@
-drop table if exists rollup cascade;
+drop table if exists population_rollup cascade;
 
-CREATE TABLE rollup AS (
+CREATE TABLE population_rollup AS (
     SELECT
         year_reported
         ,basin_flag
         ,flag AS contam_type_flag
         ,PRIMACY_AGENCY_CODE AS state_cd
+        ,POP_CATEGORY
         ,value_description
         ,contaminant_code
         ,COUNT(distinct concat) AS violation_cnt
@@ -13,7 +14,7 @@ CREATE TABLE rollup AS (
 
     WHERE year_reported > 2000
 
-    group by 1,2,3,4,5,6
+    group by 1,2,3,4,5,6,7
 );
 
-\copy (select * from rollup) to 'output/state_level.csv' csv header;
+\copy (select * from population_rollup) to 'output/population_level.csv' csv header;

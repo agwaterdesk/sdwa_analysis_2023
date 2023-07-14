@@ -3,18 +3,27 @@ drop table if exists export_prep cascade;
 create table export_prep AS (
 
     SELECT DISTINCT
-        geo.state_served
+        geo.PRIMACY_AGENCY_CODE
+        ,basin.basin_flag
+        ,exc.flag
+        ,geo.POP_CAT_3_CODE as POP_CATEGORY
         ,codes.value_description
         ,v.* 
     FROM violations as v
 
-    INNER JOIN SDWA_GEOGRAPHIC_AREAS as geo
+    LEFT JOIN SDWA_PUB_WATER_SYSTEMS as geo
         on v.pwsid = geo.pwsid
-        AND geo.state_served IS NOT NULL
+        AND geo.PRIMACY_AGENCY_CODE IS NOT NULL
 
-    LEFT JOIN SDWA_ref_code_values as codes
+    LEFT JOIN BASIN_FLAGS as basin
+        on basin.state_cd = geo.PRIMACY_AGENCY_CODE
+
+    INNER JOIN SDWA_ref_code_values as codes
         on v.CONTAMINANT_CODE = codes.VALUE_CODE
-        AND codes.VALUE_TYPE = 'CONTAMINANT_CODE'        
+        AND codes.VALUE_TYPE = 'CONTAMINANT_CODE'  
+
+    LEFT JOIN contam_excludes as exc
+        on exc.code = v.CONTAMINANT_CODE
 );
 
 -- notes 
